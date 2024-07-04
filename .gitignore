@@ -32,3 +32,24 @@ override.tf.json
 # Ignore CLI configuration files
 .terraformrc
 terraform.rc
+
+# Ignore all files in the .idea directory
+.idea/
+
+# Ignore specific IDEA project files
+*.iml
+*.iws
+
+# Ignore IntelliJ IDEA workspace files
+workspace.xml
+tasks.xml
+usage.statistics.xml
+
+# Ignore run/debug configurations
+*.run.xml
+*.debug.xml
+
+# Ignore deployment configurations
+deployment.xml
+
+
