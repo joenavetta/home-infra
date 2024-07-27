@@ -1,0 +1,61 @@
+---
+- name: Install Omada Software
+  hosts: omada.cowshed.cc
+  remote_user: ubuntu
+  vars:
+    libssl_deb_file: libssl1.1_1.1.1-1ubuntu2.1~18.04.23_amd64.deb
+    libssl_url: http://archive.ubuntu.com/ubuntu/pool/main/o/openssl/{{ libssl_deb_file }}
+    omada_deb_file: Omada_SDN_Controller_v5.14.26.1_linux_x64.deb
+    omada_url: https://static.tp-link.com/upload/software/2024/202407/20240710/{{ omada_deb_file }}
+
+  tasks:
+    - name: Install openjdk-8-jre-headless
+      ansible.builtin.apt:
+        name: openjdk-8-jre-headless
+        state: present
+
+    - name: Download libssl1.1 package
+      ansible.builtin.get_url:
+        url: '{{ libssl_url }}'
+        dest: '/tmp/{{ libssl_deb_file }}'
+
+    - name: Install libssl1.1 package
+      ansible.builtin.apt:
+        deb: '/tmp/{{ libssl_deb_file }}'
+
+    - name: Download and add MongoDB GPG key
+      apt_key:
+        url: https://www.mongodb.org/static/pgp/server-4.4.asc
+        state: present
+
+    - name: Add MongoDB repository
+      apt_repository:
+        repo: "deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu focal/mongodb-org/4.4 multiverse"
+        state: present
+        filename: "mongodb-org-4.4"
+      register: add_mongodb_repo
+
+    - name: Update apt package index
+      apt:
+        update_cache: yes
+      when: add_mongodb_repo.changed
+
+    - name: Install MongoDB package
+      apt:
+        name: mongodb-org
+        state: present
+
+    - name: Install jsvc
+      apt:
+        name: jsvc
+        state: present
+
+    - name: Download Omada SDN Controller package
+      get_url:
+        url: '{{ omada_url }}'
+        dest: '/tmp/{{ omada_deb_file }}'
+
+    - name: Install Omada SDN Controller package
+      apt:
+        deb: '/tmp/{{ omada_deb_file }}'
+        state: present
