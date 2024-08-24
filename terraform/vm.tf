@@ -1,11 +1,12 @@
-resource "proxmox_vm_qemu" "ubuntu2204" {
-  target_node = local.pve_node
 
-  for_each = {for i, v in local.qemu_vms.ubuntu2204 : i => v}
+resource "proxmox_vm_qemu" "vms" {
+  target_node = local.proxmox.node
+
+  for_each = {for i, v in local.vms : v.name => v}
 
   agent                  = 1
   boot                   = "order=scsi0"
-  clone                  = local.qemu_vms.clone
+  clone                  = each.value.clone
   cores                  = each.value.cores
   cpu                    = "host"
   define_connection_info = false

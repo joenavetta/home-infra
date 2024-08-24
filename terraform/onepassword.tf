@@ -1,5 +1,5 @@
 data "onepassword_item" "cloudflare" {
-  vault = local.op_vault_name
+  vault = local.one_password.vault_name
   title = "Terraform Edit DNS"
 }
 
