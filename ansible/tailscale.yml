@@ -1,0 +1,10 @@
+---
+- name: Install Tailscale
+  hosts: tailscale-debian
+  vars:
+    libssl_deb_file: libssl1.1_1.1.1-1ubuntu2.1~18.04.23_amd64.deb
+    libssl_url: http://archive.ubuntu.com/ubuntu/pool/main/o/openssl/{{ libssl_deb_file }}
+    omada_deb_file: Omada_SDN_Controller_v5.14.26.1_linux_x64.deb
+    omada_url: https://static.tp-link.com/upload/software/2024/202407/20240710/{{ omada_deb_file }}
+
+  tasks:

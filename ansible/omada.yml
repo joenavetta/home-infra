@@ -1,7 +1,6 @@
 ---
 - name: Install Omada Software
-  hosts: omada.cowshed.cc
-  remote_user: ubuntu
+  hosts: omada
   vars:
     libssl_deb_file: libssl1.1_1.1.1-1ubuntu2.1~18.04.23_amd64.deb
     libssl_url: http://archive.ubuntu.com/ubuntu/pool/main/o/openssl/{{ libssl_deb_file }}

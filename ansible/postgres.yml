@@ -1,0 +1,25 @@
+---
+- name: install postgresql
+  hosts: postgres
+  gather_facts: True
+  vars:
+    postgresql_python_library: python3-psycopg2
+    postgresql_databases:
+      - name: kea
+        owner: kea
+      - name: stork
+        owner: stork-server
+    postgresql_users:
+      - name: kea
+        password: "{{ lookup('community.general.onepassword', 'Database (ISC Kea)', vault='HomeAutomation') }}"
+        db: kea
+      - name: stork-server
+        password: "{{ lookup('community.general.onepassword', 'Database (ISC Stork)', vault='HomeAutomation') }}"
+        db: stork
+  roles:
+    - role: geerlingguy.postgresql
+      become: yes
+  tasks:
+    - name: Test
+      ansible.builtin.debug:
+        var: lookup('community.general.onepassword', 'Database (ISC Stork)', vault='HomeAutomation')

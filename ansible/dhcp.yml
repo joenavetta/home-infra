@@ -1,0 +1,53 @@
+---
+- name: install DHCP
+  hosts: dhcp
+  become: yes
+  tasks:
+    - name: install prerequisites
+      ansible.builtin.apt:
+        name:
+          - debian-keyring
+          - debian-archive-keyring
+          - apt-transport-https
+        state: present
+
+    - name: install ISC Kea repo
+      ansible.builtin.deb822_repository:
+        name: isc-kea-2-6
+        types:
+          - deb
+          - deb-src
+        uris: https://dl.cloudsmith.io/public/isc/kea-2-6/deb/ubuntu
+        components:
+          - main
+        suites:
+          - jammy
+        signed_by: https://dl.cloudsmith.io/public/isc/kea-2-6/gpg.63D408891D8B8D01.key
+        state: present
+        enabled: true
+
+    - name: install ISC Kea package
+      ansible.builtin.apt:
+        name: isc-kea
+        state: present
+
+    - name: install ISC Stork repo
+      ansible.builtin.deb822_repository:
+        name: isc-stork
+        types:
+          - deb
+          - deb-src
+        uris: https://dl.cloudsmith.io/public/isc/stork/deb/ubuntu
+        components:
+          - main
+        suites:
+          - jammy
+        signed_by: https://dl.cloudsmith.io/public/isc/stork/gpg.77F64EC28053D1FB.key
+        state: present
+        enabled: true
+
+    - name: install ISC Stork package
+      ansible.builtin.apt:
+        name: isc-stork-server
+        state: present
+
